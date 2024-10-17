@@ -1,16 +1,34 @@
-// src/App.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import WeatherCard from "./components/WeatherCard";
-import useWeatherData from "./hooks/useWeatherData";
+import { fetchWeatherData } from "./api/api";
 
 const App = () => {
+  const [weatherData, setWeatherData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const locations = [
     "https://wttr.in/boulder,co?format=j1",
     "https://wttr.in/losangeles,ca?format=j1",
     "https://wttr.in/newyork,ny?format=j1",
   ];
 
-  const { weatherData, loading, error } = useWeatherData(locations);
+  useEffect(() => {
+    const fetchAllWeatherData = async () => {
+      try {
+        const promises = locations.map((url) => fetchWeatherData(url));
+        const results = await Promise.all(promises);
+        console.log("results", results);
+        setWeatherData(results);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllWeatherData();
+  }, []);
 
   if (loading) return <p className="text-center mt-6">Loading...</p>;
   if (error)
