@@ -8,7 +8,7 @@ const WeatherCard = ({ location, temp, weather, humidity, windSpeed }) => {
       case "sunny":
         return <WiDaySunny className="text-yellow-500 text-6xl" />;
       case "overcast":
-        return <WiCloud className="text-blue-500 text-6xl" />;
+        return <WiCloud className="text-gray-400  text-6xl" />;
       default:
         return <WiDaySunny className="text-gray-500 text-6xl" />;
     }
